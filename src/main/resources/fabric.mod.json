@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "mcci_orange_text",
+	"version": "${version}",
+	"name": "MCCI Orange Text Features",
+	"description": "A mod that allows you to automate orange text in MCC Island, inspired by Dazzith, Harbinger of the Orange",
+	"authors": [
+		"Mushroomified, Vanguard of the Orange"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/mcci_orange_text/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"mushroomified.mcci_orange_text.MCCI_orange_text"
+		],
+		"client": [
+			"mushroomified.mcci_orange_text.client.HotKeys"
+		]
+	},
+	"mixins": [
+		"mcci_orange_text.mixins.json",
+		{
+			"config": "mcci_orange_text.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
