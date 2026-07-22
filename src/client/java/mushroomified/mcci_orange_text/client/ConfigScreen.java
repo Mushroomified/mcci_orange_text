@@ -1,5 +1,6 @@
 package mushroomified.mcci_orange_text.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -40,13 +41,67 @@ public class ConfigScreen {
                 )
                         .setSaveConsumer(words ->{
                                 WordConfig.words = words;
-                                WordConfig.save();
+                        })
+                        .build()
+        );
+
+        general.addEntry(
+                entryBuilder.startKeyCodeField(
+                                Component.literal("Insert Word Key 1"),
+                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.get(0))
+                        )
+                        .setKeySaveConsumer(key -> {
+                            ConfigManager.CONFIG.insertWordKeybind.set(0, key.getValue());
+
+                        })
+                        .build()
+        );
+
+        general.addEntry(
+                entryBuilder.startKeyCodeField(
+                                Component.literal("Insert Word Key 2 (optional)"),
+                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.get(1))
+                        )
+                        .setKeySaveConsumer(key -> {
+                            ConfigManager.CONFIG.insertWordKeybind.set(1, key.getValue());
+
+                        })
+                        .build()
+        );
+
+        general.addEntry(
+                entryBuilder.startKeyCodeField(
+                                Component.literal("Orange Toggle Key 1"),
+                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.toggleOrangeModeKeybind.get(0))
+                        )
+                        .setKeySaveConsumer(key -> {
+                            ConfigManager.CONFIG.toggleOrangeModeKeybind.set(0, key.getValue());
+
+                        })
+                        .build()
+        );
+
+        general.addEntry(
+                entryBuilder.startKeyCodeField(
+                                Component.literal("Orange Toggle Key 2 (optional)"),
+                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.toggleOrangeModeKeybind.get(1))
+                        )
+                        .setKeySaveConsumer(key -> {
+                            ConfigManager.CONFIG.toggleOrangeModeKeybind.set(1, key.getValue());
+
                         })
                         .build()
         );
 
 
-        builder.setSavingRunnable(ConfigManager::save);
+
+
+
+        builder.setSavingRunnable(()->{
+            ConfigManager.save();
+            WordConfig.save();
+            KeybindManager.reload();
+        });
         return builder.build();
 
     }

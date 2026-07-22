@@ -14,6 +14,9 @@ import net.minecraft.resources.Identifier;
 
 import org.lwjgl.glfw.GLFW;
 
+import java.io.ObjectInputFilter;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -33,55 +36,68 @@ public class HotKeys implements ClientModInitializer {
 
 		WordConfig.load();
 		ConfigManager.load();
+		KeybindManager.load();
 
 		ModCommands.register();
 
-		TOGGLE_ORANGE_KEY = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"key.mcci_text.toggle_orange",
-				InputConstants.Type.KEYSYM,
-				GLFW.GLFW_KEY_H,
-				CATEGORY
-		));
-
-		PASTE_SYNONYM = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"key.mcci_text.paste_synonym",
-				InputConstants.Type.KEYSYM,
-				GLFW.GLFW_KEY_RIGHT_BRACKET,
-				CATEGORY
-		));
-
-
-		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (TOGGLE_ORANGE_KEY.consumeClick()) {
-				OrangeModeManager.toggle(true);
-
-			}
-
-			while (PASTE_SYNONYM.consumeClick()){
-
-				if(client.player == null)
-					return;
-
-				if (WordConfig.words.isEmpty())
-					return;
-
-				String word = WordConfig.words.get(
-						ThreadLocalRandom.current().nextInt(WordConfig.words.size())
-				);
-
-
-				client.execute(() ->{
-					client.gui.setScreen(new ChatScreen(word,false));
-						}
-				);
 
 
 
-			}
 
-
-		});
-
+//		KeybindManager.register(
+//				new KeyCombo(new HashSet<>(ConfigManager.CONFIG.insertWordKeybind)),
+//				() -> {
+//					System.out.println("CTRL + / pressed!");
+//				}
+//		);
+//
+//
+//		TOGGLE_ORANGE_KEY = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+//				"key.mcci_text.toggle_orange",
+//				InputConstants.Type.KEYSYM,
+//				GLFW.GLFW_KEY_H,
+//				CATEGORY
+//		));
+//
+//		PASTE_SYNONYM = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+//				"key.mcci_text.paste_synonym",
+//				InputConstants.Type.KEYSYM,
+//				GLFW.GLFW_KEY_RIGHT_BRACKET,
+//				CATEGORY
+//		));
+//
+//
+//		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+//			while (TOGGLE_ORANGE_KEY.consumeClick()) {
+//				OrangeModeManager.toggle(true);
+//
+//			}
+//
+//			while (PASTE_SYNONYM.consumeClick()){
+//
+//				if(client.player == null)
+//					return;
+//
+//				if (WordConfig.words.isEmpty())
+//					return;
+//
+//				String word = WordConfig.words.get(
+//						ThreadLocalRandom.current().nextInt(WordConfig.words.size())
+//				);
+//
+//
+//				client.execute(() ->{
+//					client.gui.setScreen(new ChatScreen(word,false));
+//						}
+//				);
+//
+//
+//
+//			}
+//
+//
+//		});
+//
 	}
 
 
