@@ -15,6 +15,10 @@ public class ModCommands {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 
             dispatcher.register(ClientCommands.literal("orangetext")
+                            .executes(context -> {
+                                OrangeModeManager.showStatus();
+                                return 1;
+                            })
                     .then(ClientCommands.literal("reload")
                             .executes(context -> {
                                 ConfigManager.load();
@@ -41,6 +45,16 @@ public class ModCommands {
                                 return 1;
                             })
                     )
+                    .then(ClientCommands.literal("enable")
+                            .executes(context ->{
+                                OrangeModeManager.setStatus(true,true);
+                                return 1;
+                            }))
+                    .then(ClientCommands.literal("disable")
+                            .executes(context -> {
+                                OrangeModeManager.setStatus(false,true);
+                                return 1;
+                            }))
             );
 
 

@@ -17,6 +17,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.concurrent.ThreadLocalRandom;
 
 
+
 public class HotKeys implements ClientModInitializer {
     private static final KeyMapping.Category CATEGORY =
             KeyMapping.Category.register(Identifier.fromNamespaceAndPath("mcci_text","mcci"));
@@ -50,20 +51,8 @@ public class HotKeys implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (TOGGLE_ORANGE_KEY.consumeClick()) {
-				ConfigManager.CONFIG.isOrangeActive = !ConfigManager.CONFIG.isOrangeActive;
-				ConfigManager.save();
+				OrangeModeManager.toggle(true);
 
-				if(client.player != null){
-					client.gui.toastManager().addToast(
-							new SystemToast(
-									SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
-									Component.literal("Chat"),
-									ConfigManager.CONFIG.isOrangeActive
-											? Component.literal("ORANGE").withStyle(ChatFormatting.GOLD)
-											: Component.literal("lame").withStyle(ChatFormatting.GRAY)
-							)
-					);
-				}
 			}
 
 			while (PASTE_SYNONYM.consumeClick()){
