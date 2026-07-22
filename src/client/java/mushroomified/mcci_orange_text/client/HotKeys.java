@@ -29,6 +29,8 @@ public class HotKeys implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		ConfigPaths.init();
+
 		WordConfig.load();
 		ConfigManager.load();
 

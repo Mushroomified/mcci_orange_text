@@ -14,16 +14,12 @@ public class ConfigManager {
             .setPrettyPrinting()
             .create();
 
-    private static final Path PATH = FabricLoader.getInstance()
-            .getConfigDir()
-            .resolve("mcci_orange_text.json");
-
     public static ModConfig CONFIG = new ModConfig();
 
     public static void load() {
         try {
-            if (Files.exists(PATH)) {
-                CONFIG = GSON.fromJson(Files.readString(PATH), ModConfig.class);
+            if (Files.exists(ConfigPaths.CONFIG)) {
+                CONFIG = GSON.fromJson(Files.readString(ConfigPaths.CONFIG), ModConfig.class);
             } else {
                 save();
             }
@@ -34,7 +30,7 @@ public class ConfigManager {
 
     public static void save() {
         try {
-            Files.writeString(PATH, GSON.toJson(CONFIG));
+            Files.writeString(ConfigPaths.CONFIG, GSON.toJson(CONFIG));
         } catch (IOException e) {
             e.printStackTrace();
         }

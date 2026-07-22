@@ -13,19 +13,24 @@ public class WordConfig {
 
 
     public static void load() {
-        Path path = FabricLoader.getInstance()
-                .getConfigDir()
-                .resolve("word_list.txt");
 
         try{
-            if (!Files.exists(path)) {
-                Files.writeString(path, "This is the default text, change the config file and restart. One word per line.");
+            if (!Files.exists(ConfigPaths.WORDS)) {
+                Files.writeString(ConfigPaths.WORDS, "This is the default text, change the config file and restart. One word per line.");
             }
 
-            words = Files.readAllLines(path);
+            words = Files.readAllLines(ConfigPaths.WORDS);
 
         }
         catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void save(){
+        try{
+            Files.write(ConfigPaths.WORDS,words);
+        } catch (IOException e){
             e.printStackTrace();
         }
     }

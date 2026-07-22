@@ -38,7 +38,10 @@ public class ConfigScreen {
                         Component.literal("Words to start chat with"),
                         WordConfig.words
                 )
-                        .setSaveConsumer(words -> WordConfig.words = words)
+                        .setSaveConsumer(words ->{
+                                WordConfig.words = words;
+                                WordConfig.save();
+                        })
                         .build()
         );
 
