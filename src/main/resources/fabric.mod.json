@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"mushroomified.mcci_orange_text.client.HotKeys"
+		],
+		"modmenu": [
+			"mushroomified.mcci_orange_text.client.ModMenuIntegration"
 		]
 	},
 	"mixins": [

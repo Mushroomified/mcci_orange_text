@@ -22,13 +22,17 @@ public class HotKeys implements ClientModInitializer {
             KeyMapping.Category.register(Identifier.fromNamespaceAndPath("mcci_text","mcci"));
 
 	public static KeyMapping TOGGLE_ORANGE_KEY;
-	public static boolean isOrangeActive;
-
 	public static KeyMapping PASTE_SYNONYM;
+
+
 
 	@Override
 	public void onInitializeClient() {
 		WordConfig.load();
+		ConfigManager.load();
+
+		ModCommands.register();
+
 		TOGGLE_ORANGE_KEY = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.mcci_text.toggle_orange",
 				InputConstants.Type.KEYSYM,
@@ -46,14 +50,15 @@ public class HotKeys implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (TOGGLE_ORANGE_KEY.consumeClick()) {
-				isOrangeActive = !isOrangeActive;
+				ConfigManager.CONFIG.isOrangeActive = !ConfigManager.CONFIG.isOrangeActive;
+				ConfigManager.save();
 
 				if(client.player != null){
 					client.gui.toastManager().addToast(
 							new SystemToast(
 									SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
 									Component.literal("Chat"),
-									isOrangeActive
+									ConfigManager.CONFIG.isOrangeActive
 											? Component.literal("ORANGE").withStyle(ChatFormatting.GOLD)
 											: Component.literal("lame").withStyle(ChatFormatting.GRAY)
 							)

@@ -1,6 +1,7 @@
 package mushroomified.mcci_orange_text.client.mixin;
 
 
+import mushroomified.mcci_orange_text.client.ConfigManager;
 import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -17,14 +18,13 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
-import static mushroomified.mcci_orange_text.client.HotKeys.isOrangeActive;
 
 @Mixin(ClientPacketListener.class)
 public class ExampleClientMixin {
 	@ModifyVariable(at = @At("HEAD"), method = "sendChat", argsOnly = true)
 	private String makeOrange(String message) {
 
-		if (isOrangeActive) {
+		if (ConfigManager.CONFIG.isOrangeActive) {
 			return "*" + message + "*";
 		}
 		return message;
