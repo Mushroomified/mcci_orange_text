@@ -33,6 +33,15 @@ public class ConfigScreen {
 
         );
 
+        general.addEntry(
+                entryBuilder.startStrList(
+                        Component.literal("Words to start chat with"),
+                        WordConfig.words
+                )
+                        .setSaveConsumer(words -> WordConfig.words = words)
+                        .build()
+        );
+
 
         builder.setSavingRunnable(ConfigManager::save);
         return builder.build();
