@@ -7,11 +7,16 @@ import java.util.Set;
 
 public class KeybindManager {
 
-    private static final Map<KeyCombo, Runnable> binds = new HashMap<>();
+    private record KeybindData(
+            Runnable action,
+            Set<KeyBindContext> contexts
+    ){}
+
+    private static final Map<KeyCombo, KeybindData> binds = new HashMap<>();
 
 
-    public static void register(KeyCombo combo, Runnable action) {
-        binds.put(combo, action);
+    public static void register(KeyCombo combo, Runnable action, Set<KeyBindContext> contexts) {
+        binds.put(combo, new KeybindData(action, contexts));
     }
 
 
@@ -23,6 +28,7 @@ public class KeybindManager {
                         )
                 ),
                 () -> OrangeModeManager.toggle(true)
+                , ConfigManager.CONFIG.toggleOrangeModeContexts
         );
 
         register(
@@ -32,6 +38,7 @@ public class KeybindManager {
                         )
                 ),
                 WordActions::insertRandomWord
+                , ConfigManager.CONFIG.insertWordContexts
         );
 
     }
@@ -44,10 +51,14 @@ public class KeybindManager {
 
     public static boolean checkCombos(Set<Integer> pressedKeys) {
 
-        for (var entry : binds.entrySet()) {
+        KeyBindContext currentContext = ContextManager.getCurrentContext();
 
-            if (entry.getKey().matches(pressedKeys)) {
-                entry.getValue().run();
+        for (Map.Entry<KeyCombo, KeybindData> entry : binds.entrySet()) {
+
+            if (entry.getKey().matches(pressedKeys)
+                    && entry.getValue().contexts.contains(currentContext)){
+
+                entry.getValue().action.run();
                 return true;
             }
 

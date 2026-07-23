@@ -23,6 +23,7 @@ public class ModCommands {
                             .executes(context -> {
                                 ConfigManager.load();
                                 WordConfig.load();
+                                KeybindManager.reload();
 
                                 context.getSource().getPlayer().sendSystemMessage(
                                         Component.literal("Orange Config Reloaded!"));

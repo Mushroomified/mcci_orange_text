@@ -93,6 +93,26 @@ public class ConfigScreen {
                         .build()
         );
 
+//        general.addEntry(
+//                entryBuilder.startModifierKeyCodeField()
+//        )
+//
+//        for (KeyBindContext context : KeyBindContext.values()) {
+//            general.addEntry(
+//                    entryBuilder.startBooleanToggle(
+//                                    Component.literal(context.name()),
+//                                    ConfigManager.CONFIG.insertWordContexts.contains(context)
+//                            )
+//                            .setSaveConsumer(enabled -> {
+//                                if (enabled) {
+//                                    ConfigManager.CONFIG.insertWordContexts.add(context);
+//                                } else {
+//                                    ConfigManager.CONFIG.insertWordContexts.remove(context);
+//                                }
+//                            })
+//                            .build()
+//            );
+//        }
 
 
 
