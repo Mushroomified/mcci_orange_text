@@ -1,12 +1,10 @@
 package mushroomified.mcci_orange_text.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.terraformersmc.modmenu.util.mod.Mod;
+import me.shedaniel.clothconfig2.api.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 
 
 public class ConfigScreen {
@@ -45,74 +43,90 @@ public class ConfigScreen {
                         .build()
         );
 
-        general.addEntry(
-                entryBuilder.startKeyCodeField(
-                                Component.literal("Insert Word Key 1"),
-                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.get(0))
-                        )
-                        .setKeySaveConsumer(key -> {
-                            ConfigManager.CONFIG.insertWordKeybind.set(0, key.getValue());
+        ConfigCategory orangeToggle = builder.getOrCreateCategory(
+                Component.literal("Orange Toggle")
+        );
 
+
+        orangeToggle.addEntry(
+                entryBuilder.startModifierKeyCodeField(
+                        Component.literal("Orange Toggle Hotkey (can be a combination like Ctrl + H)"),
+                                ModifierKeyCode.of(
+                                        InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.toggleOrangeModeKeybind.key),
+                                        Modifier.of(
+                                                ConfigManager.CONFIG.toggleOrangeModeKeybind.alt,
+                                                ConfigManager.CONFIG.toggleOrangeModeKeybind.ctrl,
+                                                ConfigManager.CONFIG.toggleOrangeModeKeybind.shift))
+                )
+                        .setModifierSaveConsumer(modifierKeyCode -> {
+                            ConfigManager.CONFIG.toggleOrangeModeKeybind.key = modifierKeyCode.getKeyCode().getValue();
+                            ConfigManager.CONFIG.toggleOrangeModeKeybind.alt = modifierKeyCode.getModifier().hasAlt();
+                            ConfigManager.CONFIG.toggleOrangeModeKeybind.ctrl = modifierKeyCode.getModifier().hasControl();
+                            ConfigManager.CONFIG.toggleOrangeModeKeybind.shift = modifierKeyCode.getModifier().hasShift();
                         })
                         .build()
         );
 
-        general.addEntry(
-                entryBuilder.startKeyCodeField(
-                                Component.literal("Insert Word Key 2 (optional)"),
-                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.get(1))
-                        )
-                        .setKeySaveConsumer(key -> {
-                            ConfigManager.CONFIG.insertWordKeybind.set(1, key.getValue());
+        for (KeyBindContext context : KeyBindContext.values()) {
+            orangeToggle.addEntry(
+                    entryBuilder.startBooleanToggle(
+                                    Component.literal(context.name()),
+                                    ConfigManager.CONFIG.toggleOrangeModeContexts.contains(context)
+                            )
+                            .setSaveConsumer(enabled -> {
+                                if (enabled) {
+                                    ConfigManager.CONFIG.toggleOrangeModeContexts.add(context);
+                                } else {
+                                    ConfigManager.CONFIG.toggleOrangeModeContexts.remove(context);
+                                }
+                            })
+                            .build()
+            );
+        }
 
+        ConfigCategory insertWord = builder.getOrCreateCategory(
+                Component.literal("Insert Word")
+        );
+
+        insertWord.addEntry(
+                entryBuilder.startModifierKeyCodeField(
+                                Component.literal("Insert Word Hotkey (can be a combination like Ctrl + H)"),
+                                ModifierKeyCode.of(
+                                        InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.key),
+                                        Modifier.of(
+                                                ConfigManager.CONFIG.insertWordKeybind.alt,
+                                                ConfigManager.CONFIG.insertWordKeybind.ctrl,
+                                                ConfigManager.CONFIG.insertWordKeybind.shift))
+                        )
+                        .setModifierSaveConsumer(modifierKeyCode -> {
+                            ConfigManager.CONFIG.insertWordKeybind.key = modifierKeyCode.getKeyCode().getValue();
+                            ConfigManager.CONFIG.insertWordKeybind.alt = modifierKeyCode.getModifier().hasAlt();
+                            ConfigManager.CONFIG.insertWordKeybind.ctrl = modifierKeyCode.getModifier().hasControl();
+                            ConfigManager.CONFIG.insertWordKeybind.shift = modifierKeyCode.getModifier().hasShift();
                         })
                         .build()
         );
 
-        general.addEntry(
-                entryBuilder.startKeyCodeField(
-                                Component.literal("Orange Toggle Key 1"),
-                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.toggleOrangeModeKeybind.get(0))
-                        )
-                        .setKeySaveConsumer(key -> {
-                            ConfigManager.CONFIG.toggleOrangeModeKeybind.set(0, key.getValue());
 
-                        })
-                        .build()
-        );
 
-        general.addEntry(
-                entryBuilder.startKeyCodeField(
-                                Component.literal("Orange Toggle Key 2 (optional)"),
-                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.toggleOrangeModeKeybind.get(1))
-                        )
-                        .setKeySaveConsumer(key -> {
-                            ConfigManager.CONFIG.toggleOrangeModeKeybind.set(1, key.getValue());
+        for (KeyBindContext context : KeyBindContext.values()) {
+            insertWord.addEntry(
+                    entryBuilder.startBooleanToggle(
+                                    Component.literal(context.name()),
+                                    ConfigManager.CONFIG.insertWordContexts.contains(context)
+                            )
+                            .setSaveConsumer(enabled -> {
+                                if (enabled) {
+                                    ConfigManager.CONFIG.insertWordContexts.add(context);
+                                } else {
+                                    ConfigManager.CONFIG.insertWordContexts.remove(context);
+                                }
+                            })
+                            .build()
+            );
+        }
 
-                        })
-                        .build()
-        );
 
-//        general.addEntry(
-//                entryBuilder.startModifierKeyCodeField()
-//        )
-//
-//        for (KeyBindContext context : KeyBindContext.values()) {
-//            general.addEntry(
-//                    entryBuilder.startBooleanToggle(
-//                                    Component.literal(context.name()),
-//                                    ConfigManager.CONFIG.insertWordContexts.contains(context)
-//                            )
-//                            .setSaveConsumer(enabled -> {
-//                                if (enabled) {
-//                                    ConfigManager.CONFIG.insertWordContexts.add(context);
-//                                } else {
-//                                    ConfigManager.CONFIG.insertWordContexts.remove(context);
-//                                }
-//                            })
-//                            .build()
-//            );
-//        }
 
 
 

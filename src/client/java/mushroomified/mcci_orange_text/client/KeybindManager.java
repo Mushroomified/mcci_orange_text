@@ -1,5 +1,8 @@
 package mushroomified.mcci_orange_text.client;
 
+import com.terraformersmc.modmenu.util.mod.Mod;
+import org.lwjgl.glfw.GLFW;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,25 +24,25 @@ public class KeybindManager {
 
 
     public static void load(){
-        register(
-                new KeyCombo(
-                        new HashSet<>(
-                                ConfigManager.CONFIG.toggleOrangeModeKeybind
-                        )
-                ),
-                () -> OrangeModeManager.toggle(true)
-                , ConfigManager.CONFIG.toggleOrangeModeContexts
+        register(ConfigManager.CONFIG.insertWordKeybind,
+                WordActions::insertRandomWord,
+                ConfigManager.CONFIG.insertWordContexts
         );
 
-        register(
-                new KeyCombo(
-                        new HashSet<>(
-                                ConfigManager.CONFIG.insertWordKeybind
-                        )
-                ),
-                WordActions::insertRandomWord
-                , ConfigManager.CONFIG.insertWordContexts
+        register(ConfigManager.CONFIG.toggleOrangeModeKeybind,
+                () -> OrangeModeManager.toggle(true),
+                ConfigManager.CONFIG.toggleOrangeModeContexts
         );
+
+//        register(
+//                new KeyCombo(
+//                        new HashSet<>(
+//                                ConfigManager.CONFIG.insertWordKeybind
+//                        )
+//                ),
+//                WordActions::insertRandomWord
+//                , ConfigManager.CONFIG.insertWordContexts
+//        );
 
     }
 
@@ -50,6 +53,8 @@ public class KeybindManager {
 
 
     public static boolean checkCombos(Set<Integer> pressedKeys) {
+
+
 
         KeyBindContext currentContext = ContextManager.getCurrentContext();
 
