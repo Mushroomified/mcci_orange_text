@@ -88,6 +88,12 @@ public class ConfigScreen {
                 Component.literal("Insert Word")
         );
 
+//        insertWord.addEntry(
+//                entryBuilder.startTextDescription(
+//                        new Component.literal()
+//                )
+//        )
+
         insertWord.addEntry(
                 entryBuilder.startModifierKeyCodeField(
                                 Component.literal("Insert Word Hotkey (can be a combination like Ctrl + H)"),
