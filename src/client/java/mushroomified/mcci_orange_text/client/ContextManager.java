@@ -1,5 +1,6 @@
 package mushroomified.mcci_orange_text.client;
 
+import mushroomified.mcci_orange_text.client.compat.ClientCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 
@@ -7,13 +8,13 @@ public class ContextManager {
 
     public static KeyBindContext getCurrentContext(){
 
-        Minecraft client = Minecraft.getInstance();
+//        Minecraft client = Minecraft.getInstance();
 
-        if (client.gui.screen() instanceof ChatScreen){
+        if (ClientCompat.getScreen() instanceof ChatScreen){
             return KeyBindContext.CHAT;
         }
 
-        if (client.gui.screen() != null){
+        if (ClientCompat.getScreen() != null){
             return KeyBindContext.GUI;
         }
 

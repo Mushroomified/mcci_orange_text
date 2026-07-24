@@ -1,6 +1,7 @@
 package mushroomified.mcci_orange_text.client;
 
 import com.mojang.authlib.minecraft.client.MinecraftClient;
+import mushroomified.mcci_orange_text.client.compat.ClientCompat;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 
@@ -36,11 +37,11 @@ public class ModCommands {
 
                                 client.execute(() -> {
 
-                                    var parent = client.gui.screen();
+                                    var parent = ClientCompat.getScreen();
 
                                     var configScreen = ConfigScreen.create(parent);
 
-                                    client.gui.setScreen(configScreen);
+                                    ClientCompat.setScreen(configScreen);
                                 });
 
                                 return 1;
