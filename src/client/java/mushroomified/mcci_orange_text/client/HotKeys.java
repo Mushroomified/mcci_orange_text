@@ -13,7 +13,7 @@ public class HotKeys implements ClientModInitializer {
 		KeybindManager.load();
 
 		ModCommands.register();
-		OrangeModeOverlay.register();
+		OrangeModeButton.register();
 
 	}
 
