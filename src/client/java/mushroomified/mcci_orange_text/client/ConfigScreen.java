@@ -9,6 +9,8 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
+import static mushroomified.mcci_orange_text.client.WordConfig.DEFAULT_WORD_LIST;
+
 
 public class ConfigScreen {
 
@@ -41,7 +43,7 @@ public class ConfigScreen {
                         ConfigManager.CONFIG.buttonChatOffsetX,
                         0,
                         50
-                ).setDefaultValue(0)
+                ).setDefaultValue(ConfigManager.CONFIG.buttonChatOffsetX)
                         .setSaveConsumer(value ->
                                 ConfigManager.CONFIG.buttonChatOffsetX = value)
                         .build()
@@ -53,7 +55,7 @@ public class ConfigScreen {
                                 ConfigManager.CONFIG.buttonChatOffsetY,
                                 0,
                                 50
-                        ).setDefaultValue(11)
+                        ).setDefaultValue(ConfigManager.CONFIG.buttonChatOffsetY)
                         .setSaveConsumer(value ->
                                 ConfigManager.CONFIG.buttonChatOffsetY = value)
                         .build()
@@ -65,15 +67,7 @@ public class ConfigScreen {
                 entryBuilder.startStrList(
                         Component.literal("Words to start chat with"),
                         WordConfig.words
-                        ).setDefaultValue(List.of(
-                                        "says", "proclaims", "states", "declares", "remarks", "claims",
-                                        "asserts", "maintains", "whispers", "murmurs", "sighs", "cries",
-                                        "believes", "expresses", "observes", "voices", "suggests", "mentions",
-                                        "utters", "announces", "affirms", "adds", "reports", "notes",
-                                        "explains", "comments", "argues", "warns", "confesses", "wonders",
-                                        "screams", "yells", "shouts", "mutters", "admits", "complains"
-                                )
-                        )
+                        ).setDefaultValue(DEFAULT_WORD_LIST)
                         .setSaveConsumer(words ->{
                             WordConfig.words = words;
                         })
@@ -94,8 +88,14 @@ public class ConfigScreen {
                                                 ConfigManager.CONFIG.toggleOrangeModeKeybind.alt,
                                                 ConfigManager.CONFIG.toggleOrangeModeKeybind.ctrl,
                                                 ConfigManager.CONFIG.toggleOrangeModeKeybind.shift))
-                ).setDefaultValue(ModifierKeyCode.of(InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_G), Modifier.of(false,true,false)))
-                        .setModifierSaveConsumer(modifierKeyCode -> {
+                ).setDefaultValue(ModifierKeyCode.of(
+                        InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.key),
+                                Modifier.of(
+                                        ConfigManager.CONFIG.insertWordKeybind.alt,
+                                        ConfigManager.CONFIG.insertWordKeybind.ctrl,
+                                        ConfigManager.CONFIG.insertWordKeybind.shift)
+                        )
+                )                        .setModifierSaveConsumer(modifierKeyCode -> {
                             ConfigManager.CONFIG.toggleOrangeModeKeybind.key = modifierKeyCode.getKeyCode().getValue();
                             ConfigManager.CONFIG.toggleOrangeModeKeybind.alt = modifierKeyCode.getModifier().hasAlt();
                             ConfigManager.CONFIG.toggleOrangeModeKeybind.ctrl = modifierKeyCode.getModifier().hasControl();
@@ -128,12 +128,6 @@ public class ConfigScreen {
                 Component.literal("Insert Word")
         );
 
-//        insertWord.addEntry(
-//                entryBuilder.startTextDescription(
-//                        new Component.literal()
-//                )
-//        )
-
         insertWord.addEntry(
                 entryBuilder.startModifierKeyCodeField(
                                 Component.literal("Insert Word Hotkey"),
@@ -142,9 +136,17 @@ public class ConfigScreen {
                                         Modifier.of(
                                                 ConfigManager.CONFIG.insertWordKeybind.alt,
                                                 ConfigManager.CONFIG.insertWordKeybind.ctrl,
-                                                ConfigManager.CONFIG.insertWordKeybind.shift))
+                                                ConfigManager.CONFIG.insertWordKeybind.shift)
+                                )
                         )
-                        .setDefaultValue(ModifierKeyCode.of(InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_SLASH), Modifier.of(false,true,false)))
+                        .setDefaultValue(ModifierKeyCode.of(
+                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.key),
+                                Modifier.of(
+                                        ConfigManager.CONFIG.insertWordKeybind.alt,
+                                        ConfigManager.CONFIG.insertWordKeybind.ctrl,
+                                        ConfigManager.CONFIG.insertWordKeybind.shift)
+                                )
+                        )
                         .setModifierSaveConsumer(modifierKeyCode -> {
                             ConfigManager.CONFIG.insertWordKeybind.key = modifierKeyCode.getKeyCode().getValue();
                             ConfigManager.CONFIG.insertWordKeybind.alt = modifierKeyCode.getModifier().hasAlt();

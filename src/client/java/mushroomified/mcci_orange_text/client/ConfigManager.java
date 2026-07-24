@@ -2,11 +2,10 @@ package mushroomified.mcci_orange_text.client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.fabricmc.loader.api.FabricLoader;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class ConfigManager {
 
@@ -19,12 +18,17 @@ public class ConfigManager {
     public static void load() {
         try {
             if (Files.exists(ConfigPaths.CONFIG)) {
-                CONFIG = GSON.fromJson(Files.readString(ConfigPaths.CONFIG), ModConfig.class);
+                try {
+                    CONFIG = GSON.fromJson(Files.readString(ConfigPaths.CONFIG), ModConfig.class);
+                } catch (JsonSyntaxException e) {
+                    HotKeys.LOGGER.error("[mcci_orange_text] CRITICAL CONFIG ERROR: Your configuration file is corrupted at: {}", ConfigPaths.CONFIG);
+                    throw new RuntimeException("Orange Text config file is corrupt! Please delete it at: " + ConfigPaths.CONFIG + " and a new one will be generated for you with defaults", e);
+                }
             } else {
                 save();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            HotKeys.LOGGER.error("[mcci_orange_text] Failed to load config file due to an unexpected error.", e);
         }
     }
 
@@ -32,7 +36,7 @@ public class ConfigManager {
         try {
             Files.writeString(ConfigPaths.CONFIG, GSON.toJson(CONFIG));
         } catch (IOException e) {
-            e.printStackTrace();
+            HotKeys.LOGGER.error("[mcci_orange_text] Failed to save config file due to an unexpected error.", e);
         }
     }
 }

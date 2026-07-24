@@ -9,14 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WordConfig {
+    public static List<String> DEFAULT_WORD_LIST = List.of(
+            "says", "proclaims", "states", "declares", "remarks", "claims",
+            "asserts", "maintains", "whispers", "murmurs", "sighs", "cries",
+            "believes", "expresses", "observes", "voices", "suggests", "mentions",
+            "utters", "announces", "affirms", "adds", "reports", "notes",
+            "explains", "comments", "argues", "warns", "confesses", "wonders",
+            "screams", "yells", "shouts", "mutters", "admits", "complains"
+    );
+
     public static List<String> words = new ArrayList<>();
+
 
 
     public static void load() {
 
         try{
             if (!Files.exists(ConfigPaths.WORDS)) {
-                Files.writeString(ConfigPaths.WORDS, "This is the default text, change the config file and restart. One word per line.");
+                Files.write(ConfigPaths.WORDS, DEFAULT_WORD_LIST);
             }
 
             words = Files.readAllLines(ConfigPaths.WORDS);

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ModConfig {
-    public boolean isOrangeActive = true;
+    public boolean isOrangeActive = false;
 
     public int buttonChatOffsetX = 0;
 
@@ -23,15 +23,15 @@ public class ModConfig {
     );
 
     public KeyCombo toggleOrangeModeKeybind = new KeyCombo(
-            GLFW.GLFW_KEY_H,
-            false,
+            GLFW.GLFW_KEY_G,
+            true,
             false,
             false
     );
 
 
     public Set<KeyBindContext> insertWordContexts = new HashSet<KeyBindContext>(
-            Set.of(KeyBindContext.GAMEPLAY)
+            Set.of(KeyBindContext.GAMEPLAY,KeyBindContext.CHAT)
     );
 
 
