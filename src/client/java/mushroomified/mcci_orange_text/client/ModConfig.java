@@ -33,7 +33,7 @@ public class ModConfig {
 
 
     public Set<KeyBindContext> toggleOrangeModeContexts = new HashSet<>(
-            Set.of(KeyBindContext.GAMEPLAY)
+            Set.of(KeyBindContext.GAMEPLAY, KeyBindContext.CHAT)
     );
 
 

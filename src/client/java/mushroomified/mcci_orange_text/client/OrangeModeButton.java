@@ -8,30 +8,43 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class OrangeModeButton extends AbstractWidget {
 
     private static final int COLOR_ORANGE = 0xFFFFA500; // ARGB: alpha FF + orange
     private static final int COLOR_DEFAULT = 0xFFFFFFFF; // ARGB: alpha FF + white
+    private static final int COLOR_CMDS = 0xFFC090F0; // light purple text
 
     private static final Component TEXT_ORANGE = Component.literal("ᴏʀᴀɴɢᴇ");
     private static final Component TEXT_LAME = Component.literal("ʟᴀᴍᴇ").withStyle(ChatFormatting.GRAY);
+    private static final Component TEXT_CMDS = Component.literal("ᴄᴍᴅꜱ");
+
+
+
+
+
+
 
     private static final int BACKGROUND_DEFAULT = 0xA0454545;       // lightened from 0x333333
     private static final int BACKGROUND_ORANGE = 0xA04A4038;        // default gray with a faint warm/orange tint
+    private static final int BACKGROUND_CMDS = 0xA0604878;       // muted purple background
 
     private static final int BACKGROUND_HOVER_DEFAULT = 0xA05E5E5E; // lightened from 0x4A4A4A
     private static final int BACKGROUND_HOVER_ORANGE = 0xA0665A48;  // faint-orange hover, a bit brighter than BACKGROUND_ORANGE
+    private static final int BACKGROUND_HOVER_CMDS = 0xA0604878; // same as non-hover — no interactive affordance since clicks are ignored
 
     private static final int WIDTH = 52;
     private static final int HEIGHT = 9;
@@ -55,6 +68,8 @@ public class OrangeModeButton extends AbstractWidget {
             Identifier.fromNamespaceAndPath("mcci_orange_text", "textures/gui/orange_icon.png");
     private static final Identifier ICON_TEXTURE_LAME =
             Identifier.fromNamespaceAndPath("mcci_orange_text", "textures/gui/lame_icon.png");
+    private static final Identifier ICON_TEXTURE_CMDS =
+            Identifier.fromNamespaceAndPath("mcci_orange_text", "textures/gui/cmds_icon.png");
 
 
 
@@ -90,13 +105,21 @@ public class OrangeModeButton extends AbstractWidget {
     }
 
 
+    @Override
+    public @Nullable ComponentPath nextFocusPath(FocusNavigationEvent navigationEvent) {
+        return null;
+    }
 
     @Override
-    public void onClick(@NonNull MouseButtonEvent event, boolean doubleClick) {
+    public void onClick(MouseButtonEvent event, boolean doubleClick) {
+        if (isCommandMode()) {
+            return;
+        }
+
         OrangeModeManager.toggle(false);
 
         Minecraft.getInstance().execute(() -> {
-            Screen screen = ClientCompat.getScreen();
+            Screen screen = Minecraft.getInstance().screen;
             if (screen != null) {
                 for (var child : screen.children()) {
                     if (child instanceof EditBox editBox) {
@@ -107,8 +130,10 @@ public class OrangeModeButton extends AbstractWidget {
                 }
             }
         });
-
     }
+
+
+
 
     private static final int BAR_WIDTH = 1;
 
@@ -132,17 +157,10 @@ public class OrangeModeButton extends AbstractWidget {
         drawContents(graphics, getX(), getY(), this.isHovered(), 1f);
     }
 
-    /** Shared visuals — used both as the ChatScreen widget and as the standalone HUD flash. */
-    private static void drawContents(GuiGraphicsExtractor graphics, int x, int y, boolean hovered, float alpha) {
-        boolean isOrange = ConfigManager.CONFIG.isOrangeActive;
-
-        int bgColor;
-        if (isOrange) {
-            bgColor = hovered ? BACKGROUND_HOVER_ORANGE : BACKGROUND_ORANGE;
-        } else {
-            bgColor = hovered ? BACKGROUND_HOVER_DEFAULT : BACKGROUND_DEFAULT;
-        }
+    private static void drawStateBlock(GuiGraphicsExtractor graphics, int x, int y, int bgColor,
+                                       Component label, int textColor, Identifier iconTexture, float alpha) {
         bgColor = applyAlpha(bgColor, alpha);
+        textColor = applyAlpha(textColor, alpha);
 
         int coreX = x + BAR_WIDTH;
         int coreWidth = WIDTH;
@@ -157,10 +175,6 @@ public class OrangeModeButton extends AbstractWidget {
 
         int leftBarX = x;
         graphics.fill(leftBarX, barY, leftBarX + BAR_WIDTH, barY + barHeight, bgColor);
-
-        Component label = isOrange ? TEXT_ORANGE : TEXT_LAME;
-        int textColor = applyAlpha(isOrange ? COLOR_ORANGE : COLOR_DEFAULT, alpha);
-        Identifier iconTexture = isOrange ? ICON_TEXTURE_ORANGE : ICON_TEXTURE_LAME;
 
         var font = Minecraft.getInstance().font;
         int textWidth = font.width(label);
@@ -180,12 +194,55 @@ public class OrangeModeButton extends AbstractWidget {
         graphics.text(font, label, textX, textY, textColor, false);
     }
 
+    private static int totalBlockWidth() {
+        return WIDTH + (BAR_WIDTH * 2);
+    }
+    private static void drawContents(GuiGraphicsExtractor graphics, int x, int y, boolean hovered, float alpha) {
+        boolean commandMode = isCommandMode();
+        boolean isOrange = ConfigManager.CONFIG.isOrangeActive;
+
+        int bgColor;
+        Component label;
+        int textColor;
+        Identifier iconTexture;
+
+        if (commandMode) {
+            bgColor = hovered ? BACKGROUND_HOVER_CMDS : BACKGROUND_CMDS;
+            label = TEXT_CMDS;
+            textColor = COLOR_CMDS;
+            iconTexture = ICON_TEXTURE_CMDS;
+        } else if (isOrange) {
+            bgColor = hovered ? BACKGROUND_HOVER_ORANGE : BACKGROUND_ORANGE;
+            label = TEXT_ORANGE;
+            textColor = COLOR_ORANGE;
+            iconTexture = ICON_TEXTURE_ORANGE;
+        } else {
+            bgColor = hovered ? BACKGROUND_HOVER_DEFAULT : BACKGROUND_DEFAULT;
+            label = TEXT_LAME;
+            textColor = COLOR_DEFAULT;
+            iconTexture = ICON_TEXTURE_LAME;
+        }
+
+        drawStateBlock(graphics, x, y, bgColor, label, textColor, iconTexture, alpha);
+    }
+
+    private static boolean isCommandMode() {
+        if (ContextManager.getCurrentContext() == KeyBindContext.CHAT) {
+            for (var child : ClientCompat.getScreen().children()) {
+                if (child instanceof EditBox editBox) {
+                    return editBox.getValue().startsWith("/");
+                }
+            }
+        }
+        return false;
+    }
 
 
     @Override
     protected void updateWidgetNarration(@NonNull NarrationElementOutput narrationElementOutput) {
         this.defaultButtonNarrationText(narrationElementOutput);
     }
+    private static final int OVERLAY_GAP = 3; // px between CMDS button and the flash overlay
 
     public static void register() {
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
@@ -196,18 +253,38 @@ public class OrangeModeButton extends AbstractWidget {
         });
 
         HudElementRegistry.addLast(
-                Identifier.fromNamespaceAndPath("mcci_orange_text", "orange_mode_flash"),
+                Identifier.fromNamespaceAndPath("mushroomified", "orange_mode_flash"),
                 (graphics, deltaTracker) -> {
                     float alpha = computeFlashAlpha();
-                    if (ContextManager.getCurrentContext() == KeyBindContext.CHAT || alpha <= 0f) {
+                    if (alpha <= 0f) {
                         return;
                     }
 
+                    //boolean chatOpen = Minecraft.getInstance().screen instanceof ChatScreen;
                     int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-                    int x = configuredX() - BAR_WIDTH;
                     int y = screenHeight - configuredY() - HEIGHT;
 
-                    drawContents(graphics, x, y, false, alpha);
+                    if (ContextManager.getCurrentContext() == KeyBindContext.CHAT) {
+                        if (!isCommandMode()) {
+                            return; // widget itself already shows the current orange/lame state, nothing extra needed
+                        }
+
+                        // CMDS button is already drawn by the widget — just add the toggle-result indicator beside it
+                        boolean isOrange = ConfigManager.CONFIG.isOrangeActive;
+                        int bgColor = isOrange ? BACKGROUND_ORANGE : BACKGROUND_DEFAULT;
+                        Component label = isOrange ? TEXT_ORANGE : TEXT_LAME;
+                        int textColor = isOrange ? COLOR_ORANGE : COLOR_DEFAULT;
+                        Identifier iconTexture = isOrange ? ICON_TEXTURE_ORANGE : ICON_TEXTURE_LAME;
+
+                        int buttonX = configuredX() - BAR_WIDTH;
+                        int overlayX = buttonX + totalBlockWidth() + OVERLAY_GAP;
+
+                        drawStateBlock(graphics, overlayX, y, bgColor, label, textColor, iconTexture, alpha);
+                    } else {
+                        // No chat open at all — standalone flash, same as before
+                        int x = configuredX() - BAR_WIDTH;
+                        drawContents(graphics, x, y, false, alpha);
+                    }
                 }
         );
 
