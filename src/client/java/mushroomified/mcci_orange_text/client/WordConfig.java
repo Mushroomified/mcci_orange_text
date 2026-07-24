@@ -1,6 +1,6 @@
 package mushroomified.mcci_orange_text.client;
 
-import net.fabricmc.loader.api.FabricLoader;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
