@@ -11,6 +11,10 @@ import java.util.Set;
 public class ModConfig {
     public boolean isOrangeActive = true;
 
+    public int buttonChatOffsetX = 0;
+
+    public int buttonChatOffsetY = 11;
+
     public KeyCombo insertWordKeybind = new KeyCombo(
             GLFW.GLFW_KEY_SLASH,
             true,
@@ -26,19 +30,10 @@ public class ModConfig {
     );
 
 
-//    public List<Integer> insertWordKeybind = new ArrayList<>(
-//            List.of(GLFW.GLFW_KEY_LEFT_CONTROL,
-//                    GLFW.GLFW_KEY_SLASH)
-//    );
-
     public Set<KeyBindContext> insertWordContexts = new HashSet<KeyBindContext>(
             Set.of(KeyBindContext.GAMEPLAY)
     );
 
-//    public List<Integer> toggleOrangeModeKeybind = new ArrayList<>(
-//            List.of(GLFW.GLFW_KEY_H,
-//                    GLFW.GLFW_KEY_UNKNOWN)
-//    );
 
     public Set<KeyBindContext> toggleOrangeModeContexts = new HashSet<KeyBindContext>(
             Set.of(KeyBindContext.GAMEPLAY)

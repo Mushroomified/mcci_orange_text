@@ -25,11 +25,12 @@ public class OrangeModeManager {
     }
 
     public static void showStatus() {
-        ClientCompat.showOverlayMessage(
-                ConfigManager.CONFIG.isOrangeActive
-                        ? Component.literal("Orange Mode Activated").withStyle(ChatFormatting.GOLD)
-                        : Component.literal("Lame Mode Activated").withStyle(ChatFormatting.GRAY),
-                true);
+        OrangeModeButton.flash();
+//        ClientCompat.showOverlayMessage(
+//                ConfigManager.CONFIG.isOrangeActive
+//                        ? Component.literal("Orange Mode Activated").withStyle(ChatFormatting.GOLD)
+//                        : Component.literal("Lame Mode Activated").withStyle(ChatFormatting.GRAY),
+//                true);
 
     }
 }
