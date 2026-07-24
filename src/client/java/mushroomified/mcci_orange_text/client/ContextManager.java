@@ -1,7 +1,6 @@
 package mushroomified.mcci_orange_text.client;
 
 import mushroomified.mcci_orange_text.client.compat.ClientCompat;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 
 public class ContextManager {

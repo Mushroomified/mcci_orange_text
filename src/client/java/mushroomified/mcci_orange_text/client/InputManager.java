@@ -16,7 +16,4 @@ public class InputManager {
         pressedKeys.remove(key);
     }
 
-    public static boolean isPressed(KeyCombo combo){
-        return combo.matches(pressedKeys);
-    }
 }

@@ -1,13 +1,9 @@
 package mushroomified.mcci_orange_text.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.terraformersmc.modmenu.util.mod.Mod;
 import me.shedaniel.clothconfig2.api.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
-
-import java.util.List;
 
 import static mushroomified.mcci_orange_text.client.WordConfig.DEFAULT_WORD_LIST;
 

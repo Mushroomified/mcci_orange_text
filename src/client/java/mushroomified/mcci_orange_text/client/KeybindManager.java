@@ -1,10 +1,6 @@
 package mushroomified.mcci_orange_text.client;
 
-import com.terraformersmc.modmenu.util.mod.Mod;
-import org.lwjgl.glfw.GLFW;
-
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,16 +29,6 @@ public class KeybindManager {
                 () -> OrangeModeManager.toggle(true),
                 ConfigManager.CONFIG.toggleOrangeModeContexts
         );
-
-//        register(
-//                new KeyCombo(
-//                        new HashSet<>(
-//                                ConfigManager.CONFIG.insertWordKeybind
-//                        )
-//                ),
-//                WordActions::insertRandomWord
-//                , ConfigManager.CONFIG.insertWordContexts
-//        );
 
     }
 

@@ -17,6 +17,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 
 public class OrangeModeButton extends AbstractWidget {
 
@@ -91,7 +92,7 @@ public class OrangeModeButton extends AbstractWidget {
 
 
     @Override
-    public void onClick(MouseButtonEvent event, boolean doubleClick) {
+    public void onClick(@NonNull MouseButtonEvent event, boolean doubleClick) {
         OrangeModeManager.toggle(false);
 
         Minecraft.getInstance().execute(() -> {
@@ -123,7 +124,7 @@ public class OrangeModeButton extends AbstractWidget {
 
 
     @Override
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+    protected void extractWidgetRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
         int actualY = screenHeight - bottomOffset - height;
         this.setY(actualY);
@@ -182,7 +183,7 @@ public class OrangeModeButton extends AbstractWidget {
 
 
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+    protected void updateWidgetNarration(@NonNull NarrationElementOutput narrationElementOutput) {
         this.defaultButtonNarrationText(narrationElementOutput);
     }
 
@@ -196,7 +197,7 @@ public class OrangeModeButton extends AbstractWidget {
 
         HudElementRegistry.addLast(
                 Identifier.fromNamespaceAndPath("mcci_orange_text", "orange_mode_flash"),
-                (graphics, deltaTracker) -> {;
+                (graphics, deltaTracker) -> {
                     float alpha = computeFlashAlpha();
                     if (ContextManager.getCurrentContext() == KeyBindContext.CHAT || alpha <= 0f) {
                         return;

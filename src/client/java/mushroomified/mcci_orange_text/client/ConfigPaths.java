@@ -24,7 +24,7 @@ public class ConfigPaths {
         try {
             Files.createDirectories(FOLDER);
         } catch (IOException e) {
-            e.printStackTrace();
+            HotKeys.LOGGER.error("[mcci_orange_text] Failed to create config directory due to an unexpected error.", e);
         }
     }
 }
