@@ -110,3 +110,7 @@ publishing {
 
 
 }
+
+base {
+	archivesName = "Orange Text Features-${project.minecraft_version}"
+}
