@@ -19,7 +19,7 @@
 			"mushroomified.mcci_orange_text.MCCI_orange_text"
 		],
 		"client": [
-			"mushroomified.mcci_orange_text.client.HotKeys"
+			"mushroomified.mcci_orange_text.client.OrangeTextMod"
 		],
 		"modmenu": [
 			"mushroomified.mcci_orange_text.client.ModMenuIntegration"

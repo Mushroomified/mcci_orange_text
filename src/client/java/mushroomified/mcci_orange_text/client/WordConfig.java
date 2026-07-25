@@ -32,7 +32,7 @@ public class WordConfig {
 
         }
         catch (IOException e) {
-            HotKeys.LOGGER.error("[mcci_orange_text] Failed to load word list file due to an unexpected error.", e);
+            OrangeTextMod.LOGGER.error("[mcci_orange_text] Failed to load word list file due to an unexpected error.", e);
         }
     }
 
@@ -40,7 +40,7 @@ public class WordConfig {
         try{
             Files.write(ConfigPaths.WORDS,words);
         } catch (IOException e){
-            HotKeys.LOGGER.error("[mcci_orange_text] Failed to save word list file due to an unexpected error.", e);
+            OrangeTextMod.LOGGER.error("[mcci_orange_text] Failed to save word list file due to an unexpected error.", e);
         }
     }
 }

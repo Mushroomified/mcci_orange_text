@@ -21,14 +21,14 @@ public class ConfigManager {
                 try {
                     CONFIG = GSON.fromJson(Files.readString(ConfigPaths.CONFIG), ModConfig.class);
                 } catch (JsonSyntaxException e) {
-                    HotKeys.LOGGER.error("[mcci_orange_text] CRITICAL CONFIG ERROR: Your configuration file is corrupted at: {}", ConfigPaths.CONFIG);
+                    OrangeTextMod.LOGGER.error("[mcci_orange_text] CRITICAL CONFIG ERROR: Your configuration file is corrupted at: {}", ConfigPaths.CONFIG);
                     throw new RuntimeException("Orange Text config file is corrupt! Please delete it at: " + ConfigPaths.CONFIG + " and a new one will be generated for you with defaults", e);
                 }
             } else {
                 save();
             }
         } catch (IOException e) {
-            HotKeys.LOGGER.error("[mcci_orange_text] Failed to load config file due to an unexpected error.", e);
+            OrangeTextMod.LOGGER.error("[mcci_orange_text] Failed to load config file due to an unexpected error.", e);
         }
     }
 
@@ -36,7 +36,7 @@ public class ConfigManager {
         try {
             Files.writeString(ConfigPaths.CONFIG, GSON.toJson(CONFIG));
         } catch (IOException e) {
-            HotKeys.LOGGER.error("[mcci_orange_text] Failed to save config file due to an unexpected error.", e);
+            OrangeTextMod.LOGGER.error("[mcci_orange_text] Failed to save config file due to an unexpected error.", e);
         }
     }
 }
