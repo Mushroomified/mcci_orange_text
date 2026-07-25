@@ -14,7 +14,7 @@ compared to
 ---
 
 ## Installation
-To install the mod simply download the latest release jar from [Modrinth](https://modrinth.com/project/orange-text-features)!
+To install the mod simply download the latest release jar from [Modrinth](https://modrinth.com/mod/orange-text-features)!
 Don't forget the mod's dependencies:
 - [Fabric API](https://modrinth.com/mod/fabric-api)
 - [Cloth Config API](https://modrinth.com/mod/cloth-config)
