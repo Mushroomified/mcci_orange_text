@@ -3,17 +3,41 @@
 # Orange Text Features
 
 Orange Text features is a Minecraft mod that allows the player to easily type in orange text on the server MCC Island.
-MCC Island has a feature where wrapping your message in asterisks turns it orange and removes the colon after your name.
-This mod allows you to turn on "Orange Mode" and text in orange! There is an additional feature to automatically start
-chat with a synonym of says, replacing the comma in meaning.  
-
-`Mushroomified says hello!`   
-compared to  
-`Mushroomified hello!`
 
 ---
 
-## Installation
+## ✨ Features
+MCC Island has a feature where wrapping your message in asterisks turns it orange and removes the colon after your name.
+This mod allows you to turn on "Orange Mode" and text in orange, applying the asterisks for you!  
+
+There is an additional feature to automatically start chat with a synonym of "says" (from a configurable list) because 
+MCC Island removes the colon after your name. 
+
+### Clickable Button Above Chat
+
+- Can toggle Orange Mode on and off
+- Doesn't conflict with the popular MCC Island Mod Trident
+- Shows CMD if you're typing a command
+
+### Advanced Hotkeys
+
+- Supports Modifier + Key (like Ctrl + /)
+- Configurable context (you choose whether the hotkey affects gameplay, chat, and gui)
+
+### Commands
+
+/orangetext enable   
+/orangetext disable  
+to turn Orange Mode on and off without a hotkey or the config menu
+
+/orangetext openconfig   
+to open the config menu if Mod Menu isn't installed
+
+/orangetext reload   
+to reload the config if you've changed something there and you don't want to open and close the game
+
+
+## 💻 Installation
 To install the mod simply download the latest release jar from [Modrinth](https://modrinth.com/mod/orange-text-features)!
 Don't forget the mod's dependencies:
 - [Fabric API](https://modrinth.com/mod/fabric-api)

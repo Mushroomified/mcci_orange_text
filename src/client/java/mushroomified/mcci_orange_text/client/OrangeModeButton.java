@@ -30,12 +30,7 @@ public class OrangeModeButton extends AbstractWidget {
 
     private static final Component TEXT_ORANGE = Component.literal("ᴏʀᴀɴɢᴇ");
     private static final Component TEXT_LAME = Component.literal("ʟᴀᴍᴇ").withStyle(ChatFormatting.GRAY);
-    private static final Component TEXT_CMDS = Component.literal("ᴄᴍᴅꜱ");
-
-
-
-
-
+    private static final Component TEXT_CMDS = Component.literal("ᴄᴍᴅ");
 
 
     private static final int BACKGROUND_DEFAULT = 0xA0454545;       // lightened from 0x333333
