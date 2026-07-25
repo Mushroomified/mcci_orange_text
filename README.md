@@ -39,7 +39,7 @@ artifacts (production binaries and their source bundles) can be found in the `bu
     - I used the [Eclipse Temurin](https://adoptium.net/) distribution 
 - Gradle 9.5.1
     - That is the version of Gradle I used, and I have not tested others.
-    - To be completely honest I'm not too well versed in these stuff, the fabric template did wonders
+    - To be completely honest I'm not too well versed in these stuff, the fabric example template did wonders.
 
 ## 📜 License
 
