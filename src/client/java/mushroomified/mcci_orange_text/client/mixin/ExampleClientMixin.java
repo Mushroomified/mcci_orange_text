@@ -2,6 +2,8 @@ package mushroomified.mcci_orange_text.client.mixin;
 
 
 import mushroomified.mcci_orange_text.client.ConfigManager;
+import mushroomified.mcci_orange_text.client.chat_channels.ChannelManager;
+import mushroomified.mcci_orange_text.client.chat_channels.ChatChannel;
 import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -24,7 +26,7 @@ public class ExampleClientMixin {
 	@ModifyVariable(at = @At("HEAD"), method = "sendChat", argsOnly = true)
 	private String makeOrange(String message) {
 
-		if (ConfigManager.CONFIG.isOrangeActive) {
+		if (ConfigManager.CONFIG.isOrangeActive && ChannelManager.getCurrentChannel() == ChatChannel.LOCAL) {
 			return "*" + message + "*";
 		}
 		return message;

@@ -2,6 +2,8 @@ package mushroomified.mcci_orange_text.client;
 
 
 
+import mushroomified.mcci_orange_text.client.chat_channels.ChannelManager;
+import mushroomified.mcci_orange_text.client.chat_channels.ChatChannel;
 import mushroomified.mcci_orange_text.client.compat.ClientCompat;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
@@ -26,20 +28,23 @@ public class OrangeModeButton extends AbstractWidget {
 
     private static final int COLOR_ORANGE = 0xFFFFA500; // ARGB: alpha FF + orange
     private static final int COLOR_DEFAULT = 0xFFFFFFFF; // ARGB: alpha FF + white
-    private static final int COLOR_CMDS = 0xFFC090F0; // light purple text
+    private static final int COLOR_CMD = 0xFFC090F0; // light purple text
+    private static final int COLOR_NOT_LOCAL = 0xFFFF5555;
 
     private static final Component TEXT_ORANGE = Component.literal("ᴏʀᴀɴɢᴇ");
     private static final Component TEXT_LAME = Component.literal("ʟᴀᴍᴇ").withStyle(ChatFormatting.GRAY);
-    private static final Component TEXT_CMDS = Component.literal("ᴄᴍᴅ");
+    private static final Component TEXT_CMD = Component.literal("ᴄᴍᴅ");
+    private static final Component TEXT_NOT_LOCAL = Component.literal("ɴᴏ ʟᴏᴄ");
 
+    private static final int BACKGROUND_DEFAULT = 0xA0505050;       // lightened from 0x333333
+    private static final int BACKGROUND_ORANGE = 0xA0704838;        // default gray with a faint warm/orange tint
+    private static final int BACKGROUND_CMD = 0xA0604878;       // muted purple background
+    private static final int BACKGROUND_NOT_LOCAL = 0xA0784040;
 
-    private static final int BACKGROUND_DEFAULT = 0xA0454545;       // lightened from 0x333333
-    private static final int BACKGROUND_ORANGE = 0xA04A4038;        // default gray with a faint warm/orange tint
-    private static final int BACKGROUND_CMDS = 0xA0604878;       // muted purple background
-
-    private static final int BACKGROUND_HOVER_DEFAULT = 0xA05E5E5E; // lightened from 0x4A4A4A
-    private static final int BACKGROUND_HOVER_ORANGE = 0xA0665A48;  // faint-orange hover, a bit brighter than BACKGROUND_ORANGE
-    private static final int BACKGROUND_HOVER_CMDS = 0xA0604878; // same as non-hover — no interactive affordance since clicks are ignored
+    private static final int BACKGROUND_HOVER_DEFAULT = 0xA0686868; // lightened from 0x4A4A4A
+    private static final int BACKGROUND_HOVER_ORANGE = 0xA0866050;  // faint-orange hover, a bit brighter than BACKGROUND_ORANGE
+    private static final int BACKGROUND_HOVER_CMD = 0xA0604878; // same as non-hover — no interactive affordance since clicks are ignored
+    private static final int BACKGROUND_HOVER_NOT_LOCAL = 0xA0784040;
 
     private static final int WIDTH = 52;
     private static final int HEIGHT = 9;
@@ -59,13 +64,22 @@ public class OrangeModeButton extends AbstractWidget {
     private static final long FLASH_DURATION_MILLIS = 1000L;
     private static final long FADE_DURATION_MILLIS = 200L;
 
+    private static boolean isNotLocalChannel() {
+        return ChannelManager.getCurrentChannel() != ChatChannel.LOCAL;
+    }
+
+    private static boolean isInformationalState() {
+        return isCommandMode() || isNotLocalChannel();
+    }
+
     private static final Identifier ICON_TEXTURE_ORANGE =
             Identifier.fromNamespaceAndPath("mcci_orange_text", "textures/gui/orange_icon.png");
     private static final Identifier ICON_TEXTURE_LAME =
             Identifier.fromNamespaceAndPath("mcci_orange_text", "textures/gui/lame_icon.png");
     private static final Identifier ICON_TEXTURE_CMDS =
             Identifier.fromNamespaceAndPath("mcci_orange_text", "textures/gui/cmds_icon.png");
-
+    private static final Identifier ICON_TEXTURE_NOT_LOCAL =
+            Identifier.fromNamespaceAndPath("mcci_orange_text", "textures/gui/not_local_icon.png");
 
 
     /** Call this to make the button flash on screen for ~1 second, regardless of what screen is open. */
@@ -107,12 +121,6 @@ public class OrangeModeButton extends AbstractWidget {
 
     @Override
     public void onClick(MouseButtonEvent event, boolean doubleClick) {
-        if (isCommandMode()) {
-            return;
-        }
-
-        OrangeModeManager.toggle(false);
-
         Minecraft.getInstance().execute(() -> {
             Screen screen = Minecraft.getInstance().screen;
             if (screen != null) {
@@ -125,6 +133,15 @@ public class OrangeModeButton extends AbstractWidget {
                 }
             }
         });
+
+
+        if (isCommandMode() || isNotLocalChannel()) {
+            return;
+        }
+
+        OrangeModeManager.toggle(false);
+
+
     }
 
 
@@ -194,6 +211,7 @@ public class OrangeModeButton extends AbstractWidget {
     }
     private static void drawContents(GuiGraphicsExtractor graphics, int x, int y, boolean hovered, float alpha) {
         boolean commandMode = isCommandMode();
+        boolean notLocal = isNotLocalChannel();
         boolean isOrange = ConfigManager.CONFIG.isOrangeActive;
 
         int bgColor;
@@ -202,10 +220,15 @@ public class OrangeModeButton extends AbstractWidget {
         Identifier iconTexture;
 
         if (commandMode) {
-            bgColor = hovered ? BACKGROUND_HOVER_CMDS : BACKGROUND_CMDS;
-            label = TEXT_CMDS;
-            textColor = COLOR_CMDS;
+            bgColor = hovered ? BACKGROUND_HOVER_CMD : BACKGROUND_CMD;
+            label = TEXT_CMD;
+            textColor = COLOR_CMD;
             iconTexture = ICON_TEXTURE_CMDS;
+        } else if (notLocal) {
+            bgColor = hovered ? BACKGROUND_HOVER_NOT_LOCAL : BACKGROUND_NOT_LOCAL;
+            label = TEXT_NOT_LOCAL;
+            textColor = COLOR_NOT_LOCAL;
+            iconTexture = ICON_TEXTURE_NOT_LOCAL;
         } else if (isOrange) {
             bgColor = hovered ? BACKGROUND_HOVER_ORANGE : BACKGROUND_ORANGE;
             label = TEXT_ORANGE;
@@ -247,6 +270,7 @@ public class OrangeModeButton extends AbstractWidget {
             }
         });
 
+
         HudElementRegistry.addLast(
                 Identifier.fromNamespaceAndPath("mushroomified", "orange_mode_flash"),
                 (graphics, deltaTracker) -> {
@@ -255,30 +279,28 @@ public class OrangeModeButton extends AbstractWidget {
                         return;
                     }
 
-                    //boolean chatOpen = Minecraft.getInstance().screen instanceof ChatScreen;
                     int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+                    int x = configuredX() - BAR_WIDTH;
                     int y = screenHeight - configuredY() - HEIGHT;
 
-                    if (ContextManager.getCurrentContext() == KeyBindContext.CHAT) {
-                        if (!isCommandMode()) {
-                            return; // widget itself already shows the current orange/lame state, nothing extra needed
-                        }
+                    boolean informational = isInformationalState();
 
-                        // CMDS button is already drawn by the widget — just add the toggle-result indicator beside it
+                    if (ContextManager.getCurrentContext() != KeyBindContext.CHAT) {
+                        // No widget exists to show the primary block — draw it ourselves.
+                        drawContents(graphics, x, y, false, alpha);
+                    }
+
+                    if (informational) {
+                        // Whether chat is open (widget shows CMDS/NO LOC) or closed (we just drew it above),
+                        // always add the secondary orange/lame result beside it.
                         boolean isOrange = ConfigManager.CONFIG.isOrangeActive;
                         int bgColor = isOrange ? BACKGROUND_ORANGE : BACKGROUND_DEFAULT;
                         Component label = isOrange ? TEXT_ORANGE : TEXT_LAME;
                         int textColor = isOrange ? COLOR_ORANGE : COLOR_DEFAULT;
                         Identifier iconTexture = isOrange ? ICON_TEXTURE_ORANGE : ICON_TEXTURE_LAME;
 
-                        int buttonX = configuredX() - BAR_WIDTH;
-                        int overlayX = buttonX + totalBlockWidth() + OVERLAY_GAP;
-
+                        int overlayX = x + totalBlockWidth() + OVERLAY_GAP;
                         drawStateBlock(graphics, overlayX, y, bgColor, label, textColor, iconTexture, alpha);
-                    } else {
-                        // No chat open at all — standalone flash, same as before
-                        int x = configuredX() - BAR_WIDTH;
-                        drawContents(graphics, x, y, false, alpha);
                     }
                 }
         );

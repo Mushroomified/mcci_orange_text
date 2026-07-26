@@ -1,5 +1,6 @@
 package mushroomified.mcci_orange_text.client;
 
+import mushroomified.mcci_orange_text.client.chat_channels.ChannelManager;
 import mushroomified.mcci_orange_text.client.compat.ClientCompat;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
