@@ -85,11 +85,11 @@ public class ConfigScreen {
                                                 ConfigManager.CONFIG.toggleOrangeModeKeybind.ctrl,
                                                 ConfigManager.CONFIG.toggleOrangeModeKeybind.shift))
                 ).setDefaultValue(ModifierKeyCode.of(
-                        InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.key),
+                        InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.toggleOrangeModeKeybind.key),
                                 Modifier.of(
-                                        ConfigManager.CONFIG.insertWordKeybind.alt,
-                                        ConfigManager.CONFIG.insertWordKeybind.ctrl,
-                                        ConfigManager.CONFIG.insertWordKeybind.shift)
+                                        ConfigManager.CONFIG.toggleOrangeModeKeybind.alt,
+                                        ConfigManager.CONFIG.toggleOrangeModeKeybind.ctrl,
+                                        ConfigManager.CONFIG.toggleOrangeModeKeybind.shift)
                         )
                 )                        .setModifierSaveConsumer(modifierKeyCode -> {
                             ConfigManager.CONFIG.toggleOrangeModeKeybind.key = modifierKeyCode.getKeyCode().getValue();
