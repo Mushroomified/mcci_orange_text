@@ -5,7 +5,7 @@ import me.shedaniel.clothconfig2.api.*;
 import mushroomified.mcci_orange_text.client.mod_activation.ActivationOption;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import org.apache.commons.text.WordUtils;
+
 import org.lwjgl.glfw.GLFW;
 
 import static mushroomified.mcci_orange_text.client.WordConfig.DEFAULT_WORD_LIST;
@@ -13,13 +13,34 @@ import static mushroomified.mcci_orange_text.client.WordConfig.DEFAULT_WORD_LIST
 
 public class ConfigScreen {
 
+    private static String capitalize(String str) {
+        if (str == null || str.isEmpty()) return str;
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+
     private static String CapitalizeButNotGUI(String allCapsString){
         if (allCapsString.equals("GUI")){
             return allCapsString;
         } else {
-            return WordUtils.capitalize(allCapsString.toLowerCase());
+            return capitalize(allCapsString.toLowerCase());
         }
     }
+
+    private static String capitalizeFully(String str) {
+        if (str == null || str.isEmpty()) return str;
+        String[] words = str.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                sb.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1).toLowerCase())
+                        .append(" ");
+            }
+        }
+        return sb.toString().trim();
+    }
+
 
 
     public static Screen create(Screen parent) {
@@ -45,7 +66,7 @@ public class ConfigScreen {
 
                             String spacedName = rawName.replace('_',' ').toLowerCase();
 
-                            String titleCaseName = WordUtils.capitalizeFully(spacedName);
+                            String titleCaseName = capitalizeFully(spacedName);
 
                             String capitalizedMCCI = titleCaseName.replace("Mcci", "MCCI");
 
