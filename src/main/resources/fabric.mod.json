@@ -11,6 +11,13 @@
 		"sources": "https://github.com/Mushroomified/mcci_orange_text",
 		"issues": "https://github.com/Mushroomified/mcci_orange_text/issues"
 	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.issues": "https://github.com/Mushroomified/mcci_orange_text/issues"
+			}
+		}
+	},
 	"license": "MIT",
 	"icon": "assets/mcci_orange_text/icon.png",
 	"environment": "*",
