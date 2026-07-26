@@ -1,11 +1,14 @@
 package mushroomified.mcci_orange_text.client;
 
+import mushroomified.mcci_orange_text.client.mod_activation.ActivationOption;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class ModConfig {
+    public ActivationOption activationOption = ActivationOption.ONLY_IN_MCCI;
+
     public boolean isOrangeActive = false;
 
     public int buttonChatOffsetX = 0;

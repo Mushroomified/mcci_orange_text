@@ -5,6 +5,7 @@ package mushroomified.mcci_orange_text.client;
 import mushroomified.mcci_orange_text.client.chat_channels.ChannelManager;
 import mushroomified.mcci_orange_text.client.chat_channels.ChatChannel;
 import mushroomified.mcci_orange_text.client.compat.ClientCompat;
+import mushroomified.mcci_orange_text.client.mod_activation.ModTurnedOnState;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
@@ -120,7 +121,16 @@ public class OrangeModeButton extends AbstractWidget {
     }
 
     @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (!ModTurnedOnState.isModActive()) {
+            return false;
+        }
+        return super.mouseClicked(event, doubleClick);
+    }
+
+    @Override
     public void onClick(MouseButtonEvent event, boolean doubleClick) {
+        //must do this before logic to make sure player can still type in chat
         Minecraft.getInstance().execute(() -> {
             Screen screen = Minecraft.getInstance().screen;
             if (screen != null) {
@@ -135,7 +145,7 @@ public class OrangeModeButton extends AbstractWidget {
         });
 
 
-        if (isCommandMode() || isNotLocalChannel()) {
+        if (!ModTurnedOnState.isModActive() || isCommandMode() || isNotLocalChannel()) {
             return;
         }
 
@@ -166,7 +176,9 @@ public class OrangeModeButton extends AbstractWidget {
         int actualY = screenHeight - bottomOffset - height;
         this.setY(actualY);
 
-        drawContents(graphics, getX(), getY(), this.isHovered(), 1f);
+        if(ModTurnedOnState.isModActive()){
+            drawContents(graphics, getX(), getY(), this.isHovered(), 1f);
+        }
     }
 
     private static void drawStateBlock(GuiGraphicsExtractor graphics, int x, int y, int bgColor,
@@ -274,6 +286,10 @@ public class OrangeModeButton extends AbstractWidget {
         HudElementRegistry.addLast(
                 Identifier.fromNamespaceAndPath("mushroomified", "orange_mode_flash"),
                 (graphics, deltaTracker) -> {
+                    if (!ModTurnedOnState.isModActive()){
+                        return;
+                    }
+
                     float alpha = computeFlashAlpha();
                     if (alpha <= 0f) {
                         return;

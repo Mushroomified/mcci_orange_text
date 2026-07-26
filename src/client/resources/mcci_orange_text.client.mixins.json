@@ -3,7 +3,7 @@
   "package": "mushroomified.mcci_orange_text.client.mixin",
   "compatibilityLevel": "JAVA_25",
   "client": [
-    "ExampleClientMixin"
+    "InterceptChatMessageMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -12,7 +12,6 @@
     "requireAnnotations": true
   },
   "mixins": [
-    "ChatScreenAccessor",
     "KeyboardHandlerMixin"
   ]
 }

@@ -2,13 +2,25 @@ package mushroomified.mcci_orange_text.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import me.shedaniel.clothconfig2.api.*;
+import mushroomified.mcci_orange_text.client.mod_activation.ActivationOption;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import org.apache.commons.text.WordUtils;
+import org.lwjgl.glfw.GLFW;
 
 import static mushroomified.mcci_orange_text.client.WordConfig.DEFAULT_WORD_LIST;
 
 
 public class ConfigScreen {
+
+    private static String CapitalizeButNotGUI(String allCapsString){
+        if (allCapsString.equals("GUI")){
+            return allCapsString;
+        } else {
+            return WordUtils.capitalize(allCapsString.toLowerCase());
+        }
+    }
+
 
     public static Screen create(Screen parent) {
 
@@ -21,6 +33,29 @@ public class ConfigScreen {
         );
 
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
+
+        general.addEntry(
+                entryBuilder.startEnumSelector(
+                        Component.literal("Mod turned on"),
+                        ActivationOption.class,
+                        ConfigManager.CONFIG.activationOption)
+                        .setDefaultValue(ActivationOption.ONLY_IN_MCCI)
+                        .setEnumNameProvider(state -> {
+                            String rawName = state.name();
+
+                            String spacedName = rawName.replace('_',' ').toLowerCase();
+
+                            String titleCaseName = WordUtils.capitalizeFully(spacedName);
+
+                            String capitalizedMCCI = titleCaseName.replace("Mcci", "MCCI");
+
+                            return Component.literal(capitalizedMCCI);
+                        }
+                        )
+                        .setSaveConsumer(value ->
+                                ConfigManager.CONFIG.activationOption = value)
+                        .build()
+        );
 
         general.addEntry(
                 entryBuilder.startBooleanToggle(
@@ -39,7 +74,7 @@ public class ConfigScreen {
                         ConfigManager.CONFIG.buttonChatOffsetX,
                         0,
                         50
-                ).setDefaultValue(ConfigManager.CONFIG.buttonChatOffsetX)
+                ).setDefaultValue(0)
                         .setSaveConsumer(value ->
                                 ConfigManager.CONFIG.buttonChatOffsetX = value)
                         .build()
@@ -51,7 +86,7 @@ public class ConfigScreen {
                                 ConfigManager.CONFIG.buttonChatOffsetY,
                                 0,
                                 50
-                        ).setDefaultValue(ConfigManager.CONFIG.buttonChatOffsetY)
+                        ).setDefaultValue(11)
                         .setSaveConsumer(value ->
                                 ConfigManager.CONFIG.buttonChatOffsetY = value)
                         .build()
@@ -85,11 +120,11 @@ public class ConfigScreen {
                                                 ConfigManager.CONFIG.toggleOrangeModeKeybind.ctrl,
                                                 ConfigManager.CONFIG.toggleOrangeModeKeybind.shift))
                 ).setDefaultValue(ModifierKeyCode.of(
-                        InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.toggleOrangeModeKeybind.key),
+                        InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_G),
                                 Modifier.of(
-                                        ConfigManager.CONFIG.toggleOrangeModeKeybind.alt,
-                                        ConfigManager.CONFIG.toggleOrangeModeKeybind.ctrl,
-                                        ConfigManager.CONFIG.toggleOrangeModeKeybind.shift)
+                                        false,
+                                        true,
+                                        false)
                         )
                 )                        .setModifierSaveConsumer(modifierKeyCode -> {
                             ConfigManager.CONFIG.toggleOrangeModeKeybind.key = modifierKeyCode.getKeyCode().getValue();
@@ -99,11 +134,10 @@ public class ConfigScreen {
                         })
                         .build()
         );
-
         for (KeyBindContext context : KeyBindContext.values()) {
             orangeToggle.addEntry(
                     entryBuilder.startBooleanToggle(
-                                    Component.literal(context.name()),
+                                    Component.literal(CapitalizeButNotGUI(context.name())),
                                     ConfigManager.CONFIG.toggleOrangeModeContexts.contains(context)
                             )
                             .setSaveConsumer(enabled -> {
@@ -136,11 +170,11 @@ public class ConfigScreen {
                                 )
                         )
                         .setDefaultValue(ModifierKeyCode.of(
-                                InputConstants.Type.KEYSYM.getOrCreate(ConfigManager.CONFIG.insertWordKeybind.key),
+                                InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_SLASH),
                                 Modifier.of(
-                                        ConfigManager.CONFIG.insertWordKeybind.alt,
-                                        ConfigManager.CONFIG.insertWordKeybind.ctrl,
-                                        ConfigManager.CONFIG.insertWordKeybind.shift)
+                                        false,
+                                        true,
+                                        false)
                                 )
                         )
                         .setModifierSaveConsumer(modifierKeyCode -> {
@@ -157,7 +191,7 @@ public class ConfigScreen {
         for (KeyBindContext context : KeyBindContext.values()) {
             insertWord.addEntry(
                     entryBuilder.startBooleanToggle(
-                                    Component.literal(context.name()),
+                                    Component.literal(CapitalizeButNotGUI(context.name())),
                                     ConfigManager.CONFIG.insertWordContexts.contains(context)
                             )
                             .setSaveConsumer(enabled -> {
