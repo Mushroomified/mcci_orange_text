@@ -78,6 +78,18 @@ public class ConfigScreen {
                         .build()
         );
 
+
+        general.addEntry(
+                entryBuilder.startBooleanToggle(
+                                Component.literal("Only activate in Local chat"),
+                                ConfigManager.CONFIG.onlyActivateInLocalChat)
+                        .setDefaultValue(true)
+                        .setSaveConsumer(value ->
+                                ConfigManager.CONFIG.onlyActivateInLocalChat = value)
+                        .build()
+        );
+
+
         general.addEntry(
                 entryBuilder.startBooleanToggle(
                         Component.literal("Orange"),

@@ -2,10 +2,9 @@ package mushroomified.mcci_orange_text.client;
 
 
 
-import mushroomified.mcci_orange_text.client.chat_channels.ChannelManager;
-import mushroomified.mcci_orange_text.client.chat_channels.ChatChannel;
+import mushroomified.mcci_orange_text.client.chat_channels.LocalChatManager;
 import mushroomified.mcci_orange_text.client.compat.ClientCompat;
-import mushroomified.mcci_orange_text.client.mod_activation.ModTurnedOnState;
+import mushroomified.mcci_orange_text.client.mod_activation.ModOnManager;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
@@ -65,12 +64,8 @@ public class OrangeModeButton extends AbstractWidget {
     private static final long FLASH_DURATION_MILLIS = 1000L;
     private static final long FADE_DURATION_MILLIS = 200L;
 
-    private static boolean isNotLocalChannel() {
-        return ChannelManager.getCurrentChannel() != ChatChannel.LOCAL;
-    }
-
     private static boolean isInformationalState() {
-        return isCommandMode() || isNotLocalChannel();
+        return isCommandMode() || !LocalChatManager.isLocalAndLocalMatters();
     }
 
     private static final Identifier ICON_TEXTURE_ORANGE =
@@ -122,7 +117,7 @@ public class OrangeModeButton extends AbstractWidget {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (!ModTurnedOnState.isModActive()) {
+        if (!ModOnManager.isModActive()) {
             return false;
         }
         return super.mouseClicked(event, doubleClick);
@@ -145,7 +140,7 @@ public class OrangeModeButton extends AbstractWidget {
         });
 
 
-        if (!ModTurnedOnState.isModActive() || isCommandMode() || isNotLocalChannel()) {
+        if (!ModOnManager.isModActive() || isCommandMode() || !LocalChatManager.isLocalAndLocalMatters()) {
             return;
         }
 
@@ -176,7 +171,7 @@ public class OrangeModeButton extends AbstractWidget {
         int actualY = screenHeight - bottomOffset - height;
         this.setY(actualY);
 
-        if(ModTurnedOnState.isModActive()){
+        if(ModOnManager.isModActive()){
             drawContents(graphics, getX(), getY(), this.isHovered(), 1f);
         }
     }
@@ -223,7 +218,7 @@ public class OrangeModeButton extends AbstractWidget {
     }
     private static void drawContents(GuiGraphicsExtractor graphics, int x, int y, boolean hovered, float alpha) {
         boolean commandMode = isCommandMode();
-        boolean notLocal = isNotLocalChannel();
+        boolean notLocal = !LocalChatManager.isLocalAndLocalMatters();
         boolean isOrange = ConfigManager.CONFIG.isOrangeActive;
 
         int bgColor;
@@ -286,7 +281,7 @@ public class OrangeModeButton extends AbstractWidget {
         HudElementRegistry.addLast(
                 Identifier.fromNamespaceAndPath("mushroomified", "orange_mode_flash"),
                 (graphics, deltaTracker) -> {
-                    if (!ModTurnedOnState.isModActive()){
+                    if (!ModOnManager.isModActive()){
                         return;
                     }
 

@@ -1,7 +1,6 @@
 package mushroomified.mcci_orange_text.client;
 
-import mushroomified.mcci_orange_text.client.chat_channels.ChannelManager;
-import mushroomified.mcci_orange_text.client.mod_activation.ModTurnedOnState;
+import mushroomified.mcci_orange_text.client.mod_activation.ModOnManager;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +18,7 @@ public class OrangeTextMod implements ClientModInitializer {
 
 		ModCommands.register();
 		OrangeModeButton.register();
-		ChannelManager.register();
-		ModTurnedOnState.register();
+		ModOnManager.register();
 
 	}
 }

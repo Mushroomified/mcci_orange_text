@@ -1,12 +1,14 @@
 package mushroomified.mcci_orange_text.client;
 
-import mushroomified.mcci_orange_text.client.chat_channels.ChannelManager;
+import mushroomified.mcci_orange_text.client.chat_channels.LocalChatManager;
 import mushroomified.mcci_orange_text.client.compat.ClientCompat;
+import mushroomified.mcci_orange_text.client.mixin.InterceptActionBarMixin;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+
 
 public class ModCommands {
 
@@ -16,6 +18,14 @@ public class ModCommands {
             dispatcher.register(ClientCommands.literal("orangetext")
                             .executes(context -> {
                                 OrangeModeManager.showStatus();
+                                context.getSource().getPlayer().sendSystemMessage(
+                                        Component.literal(Boolean.toString(LocalChatManager.isLocal)
+                                        )
+                                );
+                                context.getSource().getPlayer().sendSystemMessage(
+                                        Component.literal(Boolean.toString(LocalChatManager.isLocalAndLocalMatters())
+                                        )
+                                );
                                 return 1;
                             })
                     .then(ClientCommands.literal("reload")

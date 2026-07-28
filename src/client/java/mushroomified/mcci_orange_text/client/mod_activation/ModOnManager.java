@@ -3,8 +3,7 @@ package mushroomified.mcci_orange_text.client.mod_activation;
 import mushroomified.mcci_orange_text.client.ConfigManager;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 
-public class ModTurnedOnState {
-
+public class ModOnManager {
     private static boolean onMCCIsland = false;
 
     public static void register(){

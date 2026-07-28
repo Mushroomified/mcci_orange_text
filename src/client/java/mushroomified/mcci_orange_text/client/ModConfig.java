@@ -11,6 +11,8 @@ public class ModConfig {
 
     public boolean isOrangeActive = false;
 
+    public boolean onlyActivateInLocalChat = true;
+
     public int buttonChatOffsetX = 0;
 
     public int buttonChatOffsetY = 11;
