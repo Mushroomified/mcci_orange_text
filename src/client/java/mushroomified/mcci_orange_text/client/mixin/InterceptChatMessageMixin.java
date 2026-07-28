@@ -12,13 +12,13 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(ClientPacketListener.class)
 public class InterceptChatMessageMixin {
-	@ModifyVariable(at = @At("HEAD"), method = "sendChat", argsOnly = true)
-	private String makeOrange(String message) {
+	@ModifyVariable(at = @At("HEAD"), method = "sendChat", argsOnly = true, name = "content")
+	private String makeOrange(String content) {
 
 		if (ModOnManager.isModActive() && ConfigManager.CONFIG.isOrangeActive && LocalChatManager.isLocalAndLocalMatters()) {
-			return "*" + message + "*";
+			return "*" + content + "*";
 		}
-		return message;
+		return content;
 	}
 }
 
